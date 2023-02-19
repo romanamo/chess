@@ -10,8 +10,9 @@ public class Main {
 
     public static void main(String[] args) throws IOException {
         FieldFactory factory = new FieldFactory();
+        ChessField field = factory.getChessField();
 
-        System.out.println(ChessPieceType.getMapping());
+        System.out.println(field.toString(true));
 
     }
 }
