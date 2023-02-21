@@ -6,7 +6,7 @@ import java.util.Collection;
 import java.util.Collections;
 import java.util.List;
 
-public class Vec2d{
+public class Vec2d {
 
     private int x;
     private int y;

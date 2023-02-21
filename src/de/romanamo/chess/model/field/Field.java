@@ -1,32 +1,38 @@
 package de.romanamo.chess.model.field;
 
+import de.romanamo.chess.model.piece.Piece;
+import de.romanamo.chess.model.square.Square;
+
+import java.util.List;
 import java.util.Set;
 
-public interface Field<Identifier, Value> {
+public interface Field<K, V extends Square<P>, P extends Piece> {
 
-    Value getValue(Identifier id);
+    V getValue(K id);
 
-    Set<Identifier> getIdentifiers();
+    Set<K> getIdentifiers();
 
-    Set<Value> getValues();
+    Set<V> getValues();
 
     /**
      * Creates a {@link String Representation} of the implemented Field
      * corresponding to its usual way of representation.
      *
      * @param showIdentifiers specifies, if any kind of indication
-     *                        towards the {@link Identifier Identifier} is supposed to be made
+     *                        towards the {@link K Identifier} is supposed to be made
      * @return {@link String Representation} of the Field
      */
     String toString(boolean showIdentifiers);
 
-    default boolean containsIdentifier(Identifier id) {
+    default boolean containsIdentifier(K id) {
         return this.getIdentifiers().contains(id);
     }
 
-    default boolean containsValue(Value val) {
+    default boolean containsValue(V val) {
         return this.getValues().contains(val);
     }
+
+    List<P> getFigures();
 
 
 }

@@ -1,15 +1,18 @@
 package de.romanamo.chess.model.field;
 
 import de.romanamo.chess.math.Vec2d;
+import de.romanamo.chess.model.piece.ChessPiece;
 import de.romanamo.chess.model.square.ChessSquare;
+import de.romanamo.chess.model.square.GameSquare;
 import de.romanamo.chess.structure.tuple.Couple;
 
 import java.util.HashSet;
+import java.util.List;
 import java.util.Map;
 import java.util.Set;
 
 
-public class ChessField implements Field<Vec2d, ChessSquare> {
+public class ChessField implements Field<Vec2d, ChessSquare, ChessPiece> {
 
     public final static String DEFAULT_DELIMITER = "|";
 
@@ -25,10 +28,9 @@ public class ChessField implements Field<Vec2d, ChessSquare> {
         this.delimiter = ChessField.DEFAULT_DELIMITER;
         this.spacing = ChessField.DEFAULT_SPACING;
     }
-
     @Override
     public ChessSquare getValue(Vec2d id) {
-        return this.fieldMap.get(id);
+        return null;
     }
 
     @Override
@@ -72,6 +74,11 @@ public class ChessField implements Field<Vec2d, ChessSquare> {
         }
 
         return sb.toString();
+    }
+
+    @Override
+    public List<ChessPiece> getFigures() {
+        return this.fieldMap.values().stream().map(GameSquare::getFigure).toList();
     }
 
 
