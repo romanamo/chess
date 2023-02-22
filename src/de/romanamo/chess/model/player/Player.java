@@ -1,13 +1,19 @@
 package de.romanamo.chess.model.player;
 
 import de.romanamo.chess.model.field.Field;
+import de.romanamo.chess.model.move.Move;
 import de.romanamo.chess.model.piece.Piece;
 import de.romanamo.chess.model.square.Square;
 
 import java.util.Collection;
 import java.util.List;
 
-public interface Player<P extends Piece, V extends Square<P>, K, F extends Field<K, V, P>> {
+public interface Player<
+        F extends Field<F,K,M,P,S>,
+        K,
+        M extends Move<F,K,M,P,S>,
+        P extends Piece<F,K,M,P,S>,
+        S extends Square<? extends P>> {
 
     boolean hasWon(F field);
 

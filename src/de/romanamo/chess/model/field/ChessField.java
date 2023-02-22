@@ -1,6 +1,7 @@
 package de.romanamo.chess.model.field;
 
 import de.romanamo.chess.math.Vec2d;
+import de.romanamo.chess.model.move.ChessMove;
 import de.romanamo.chess.model.piece.ChessPiece;
 import de.romanamo.chess.model.square.ChessSquare;
 import de.romanamo.chess.model.square.GameSquare;
@@ -12,7 +13,7 @@ import java.util.Map;
 import java.util.Set;
 
 
-public class ChessField implements Field<Vec2d, ChessSquare, ChessPiece> {
+public class ChessField implements Field<ChessField, Vec2d, ChessMove, ChessPiece, ChessSquare> {
 
     public final static String DEFAULT_DELIMITER = "|";
 
@@ -30,7 +31,7 @@ public class ChessField implements Field<Vec2d, ChessSquare, ChessPiece> {
     }
     @Override
     public ChessSquare getValue(Vec2d id) {
-        return null;
+        return this.fieldMap.get(id);
     }
 
     @Override

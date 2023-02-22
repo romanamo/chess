@@ -1,6 +1,14 @@
 package de.romanamo.chess.model.piece;
 
-public class ChessPiece implements Piece {
+import de.romanamo.chess.math.Vec2d;
+import de.romanamo.chess.model.field.ChessField;
+import de.romanamo.chess.model.move.ChessMove;
+import de.romanamo.chess.model.move.Move;
+import de.romanamo.chess.model.square.ChessSquare;
+
+import java.util.List;
+
+public class ChessPiece implements Piece<ChessField, Vec2d, ChessMove, ChessPiece, ChessSquare> {
 
     private final int value;
     private final ChessPieceColor chessPieceColor;
@@ -29,5 +37,19 @@ public class ChessPiece implements Piece {
     @Override
     public int getValue() {
         return this.value;
+    }
+
+    @Override
+    public List<ChessMove> getMoves(ChessField field) {
+        return null;
+    }
+
+
+    public ChessPieceColor getChessPieceColor() {
+        return chessPieceColor;
+    }
+
+    public ChessPieceType getChessPieceType() {
+        return chessPieceType;
     }
 }
