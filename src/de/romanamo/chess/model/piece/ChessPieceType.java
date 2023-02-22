@@ -43,8 +43,9 @@ public enum ChessPieceType{
                 '}';
     }
 
-    public static Map<String, ChessPieceType> getMapping() {
+    public static Map<String, ChessPieceType> getMapping(boolean isLowerCase) {
         return Arrays.stream(ChessPieceType.values())
-                .collect(Collectors.toMap(t -> String.valueOf(t.descriptor), t -> t));
+                .collect(Collectors.toMap(t -> String.valueOf(
+                        isLowerCase ? Character.toLowerCase(t.descriptor) : Character.toUpperCase(t.descriptor)), t -> t));
     }
 }

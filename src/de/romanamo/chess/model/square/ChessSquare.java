@@ -18,8 +18,14 @@ public class ChessSquare extends GameSquare<ChessPiece> {
     @Override
     public String symbol() {
         if (this.isEmpty()) {
-            return String.valueOf(chessSquareColor.getUnicodeCodePoint());
+            String back = String.valueOf(chessSquareColor.getUnicodeCodePoint());
+            return back + " " + back;
         }
         return this.piece.symbol();
+    }
+
+    @Override
+    public void setFigure(ChessPiece figure) {
+        this.piece = figure;
     }
 }

@@ -21,6 +21,8 @@ public interface Field<
 
     Set<S> getValues();
 
+
+
     /**
      * Creates a {@link String Representation} of the implemented Field
      * corresponding to its usual way of representation.
@@ -40,6 +42,8 @@ public interface Field<
     }
 
     List<P> getFigures();
+
+    void setFigure(K id, P figure);
 
     default void doMove(M move) throws MoveNotApplicableException {
         move.doMove((F) this);

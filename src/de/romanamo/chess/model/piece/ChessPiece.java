@@ -3,7 +3,6 @@ package de.romanamo.chess.model.piece;
 import de.romanamo.chess.math.Vec2d;
 import de.romanamo.chess.model.field.ChessField;
 import de.romanamo.chess.model.move.ChessMove;
-import de.romanamo.chess.model.move.Move;
 import de.romanamo.chess.model.square.ChessSquare;
 
 import java.util.List;
@@ -31,7 +30,7 @@ public class ChessPiece implements Piece<ChessField, Vec2d, ChessMove, ChessPiec
         char point = this.chessPieceColor.getUnicodeCodePoint();
         int priority = this.chessPieceType.getPriority();
 
-        return String.valueOf((char) (point + priority));
+        return " " + (char) (point + priority) + " ";
     }
 
     @Override

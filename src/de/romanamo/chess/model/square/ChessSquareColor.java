@@ -2,8 +2,8 @@ package de.romanamo.chess.model.square;
 
 public enum ChessSquareColor {
 
-    BLACK('■'),
-    WHITE('□');
+    BLACK('█'),
+    WHITE('░');
 
     private final char UnicodeCodePoint;
 

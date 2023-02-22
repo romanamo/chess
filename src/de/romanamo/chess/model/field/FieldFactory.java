@@ -9,7 +9,7 @@ import java.util.Map;
 
 public class FieldFactory {
 
-    public ChessField getChessField() {
+    public static ChessField getChessField() {
 
         Map<Vec2d, ChessSquare> chessField = new HashMap<>();
         for (int i = 1; i < 9; i++) {

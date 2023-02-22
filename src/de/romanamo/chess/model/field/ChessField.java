@@ -67,9 +67,9 @@ public class ChessField implements Field<ChessField, Vec2d, ChessMove, ChessPiec
         }
         //Creation of the horizontal bottom row of identifiers
         if (showIdentifiers) {
-            StringBuilder bottom = new StringBuilder().append("   ");
+            StringBuilder bottom = new StringBuilder().append("     ");
             for (int x = dist.getFirst().getX(); x <= dist.getSecond().getX(); x++) {
-                bottom.append( (char) (x - dist.getFirst().getX() + 'a')).append("       ");
+                bottom.append( (char) (x - dist.getFirst().getX() + 'a')).append("         ");
             }
             sb.append(bottom);
         }
@@ -80,6 +80,11 @@ public class ChessField implements Field<ChessField, Vec2d, ChessMove, ChessPiec
     @Override
     public List<ChessPiece> getFigures() {
         return this.fieldMap.values().stream().map(GameSquare::getFigure).toList();
+    }
+
+    @Override
+    public void setFigure(Vec2d id, ChessPiece figure) {
+        this.getValue(id).setFigure(figure);
     }
 
 
