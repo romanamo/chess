@@ -11,6 +11,7 @@ import java.util.HashSet;
 import java.util.List;
 import java.util.Map;
 import java.util.Set;
+import java.util.stream.Collectors;
 
 
 public class ChessField implements Field<ChessField, Vec2d, ChessMove, ChessPiece, ChessSquare> {
@@ -29,9 +30,15 @@ public class ChessField implements Field<ChessField, Vec2d, ChessMove, ChessPiec
         this.delimiter = ChessField.DEFAULT_DELIMITER;
         this.spacing = ChessField.DEFAULT_SPACING;
     }
+
     @Override
     public ChessSquare getValue(Vec2d id) {
         return this.fieldMap.get(id);
+    }
+
+    @Override
+    public ChessPiece getPiece(Vec2d id) {
+        return this.getValue(id).getFigure();
     }
 
     @Override
@@ -80,6 +87,13 @@ public class ChessField implements Field<ChessField, Vec2d, ChessMove, ChessPiec
     @Override
     public List<ChessPiece> getFigures() {
         return this.fieldMap.values().stream().map(GameSquare::getFigure).toList();
+    }
+
+    @Override
+    public Map<Vec2d, ChessPiece> getKeyFigureMap() {
+        return this.fieldMap.keySet().stream()
+                .filter(k -> !this.getValue(k).isEmpty())
+                .collect(Collectors.toMap(k -> k , this::getPiece));
     }
 
     @Override

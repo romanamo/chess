@@ -5,9 +5,11 @@ import de.romanamo.chess.model.field.ChessField;
 import de.romanamo.chess.model.move.ChessMove;
 import de.romanamo.chess.model.square.ChessSquare;
 
+import java.util.ArrayList;
 import java.util.List;
+import java.util.Map;
 
-public class ChessPiece implements Piece<ChessField, Vec2d, ChessMove, ChessPiece, ChessSquare> {
+public abstract class ChessPiece implements Piece<ChessField, Vec2d, ChessMove, ChessPiece, ChessSquare> {
 
     private final int value;
     private final ChessPieceColor chessPieceColor;
@@ -25,6 +27,22 @@ public class ChessPiece implements Piece<ChessField, Vec2d, ChessMove, ChessPiec
         this.value = type.getValue();
     }
 
+    public abstract List<ChessMove> getMoves(ChessField field, Vec2d v);
+
+    public List<ChessMove> getMoves(ChessField field) {
+        Vec2d locationVector = this.getLocationVector(field);
+        if(locationVector == null) {
+            return new ArrayList<>();
+        }
+        return this.getMoves(field, locationVector);
+    }
+
+    //TODO write
+    public Vec2d getLocationVector(ChessField field) {
+        Map<Vec2d, ChessPiece> figureMap = field.getKeyFigureMap();
+        return figureMap.keySet().stream().filter(k -> figureMap.get(k) == this).findFirst().orElse(null);
+    }
+
     @Override
     public String symbol() {
         char point = this.chessPieceColor.getUnicodeCodePoint();
@@ -38,10 +56,6 @@ public class ChessPiece implements Piece<ChessField, Vec2d, ChessMove, ChessPiec
         return this.value;
     }
 
-    @Override
-    public List<ChessMove> getMoves(ChessField field) {
-        return null;
-    }
 
 
     public ChessPieceColor getChessPieceColor() {

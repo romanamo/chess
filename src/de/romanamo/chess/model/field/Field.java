@@ -6,6 +6,7 @@ import de.romanamo.chess.model.piece.Piece;
 import de.romanamo.chess.model.square.Square;
 
 import java.util.List;
+import java.util.Map;
 import java.util.Set;
 
 public interface Field<
@@ -16,6 +17,8 @@ public interface Field<
         S extends Square<? extends P>> {
 
     S getValue(K id);
+
+    P getPiece(K id);
 
     Set<K> getIdentifiers();
 
@@ -42,6 +45,8 @@ public interface Field<
     }
 
     List<P> getFigures();
+
+    Map<K, P> getKeyFigureMap();
 
     void setFigure(K id, P figure);
 

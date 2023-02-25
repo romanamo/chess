@@ -21,6 +21,21 @@ public class Vec2d {
         this.y = vec2D.y;
     }
 
+    public Vec2d rotate(double angle) {
+        int rotatedX = (int) Math.rint(x * Math.cos(angle) - y * Math.sin(angle));
+        int rotatedY = (int) Math.rint(x * Math.sin(angle) + y * Math.cos(angle));
+
+        return new Vec2d(rotatedX, rotatedY);
+    }
+
+    public Vec2d add(Vec2d v) {
+        return new Vec2d(x + v.getX(), y + v.getY());
+    }
+
+    public Vec2d scale(int s) {
+        return new Vec2d(s * x, s * y);
+    }
+
     public int getX() {
         return x;
     }
@@ -59,9 +74,6 @@ public class Vec2d {
 
     @Override
     public String toString() {
-        return "Vec2d{" +
-                "x=" + x +
-                ", y=" + y +
-                '}';
+        return "(" + x + ", " + y + ")";
     }
 }
