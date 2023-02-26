@@ -14,22 +14,28 @@ public class Knight extends ChessPiece {
     }
 
     @Override
-    public List<ChessMove> getMoves(ChessField field, Vec2d v) {
+    public List<ChessMove> getMoves(ChessField field, Vec2d start) {
         List<ChessMove> moves = new ArrayList<>();
 
-        Vec2d moveVector1 = new Vec2d(1, 2);
-        Vec2d moveVector2 = new Vec2d(-1, 2);
-
-        //TODO check if vector not on field
+        Vec2d moveVector1 = new Vec2d(1, 3);
+        Vec2d moveVector2 = new Vec2d(-1, 3);
 
         for (int i = 0; i < 4; i++) {
             double angle = (Math.PI / 2.0) * i;
 
-            //TODO check if rotated vector is not on field
-            moves.add(new ChessMove(moveVector1, moveVector1.rotate(angle)));
-            //moves.add(new ChessMove(moveVector2, moveVector2.rotate(angle)));
-        }
+            Vec2d rotatedMoveVector1 = moveVector1.rotate(angle);
+            Vec2d rotatedMoveVector2 = moveVector2.rotate(angle);
 
+            for (Vec2d bounds : new Vec2d[]{rotatedMoveVector1, rotatedMoveVector2}) {
+                if (field.containsIdentifier(bounds)) {
+                    ChessPiece piece = field.getPiece(bounds);
+                    if(piece == null || piece.getChessPieceColor() == this.getChessPieceColor()) {
+                        moves.add(new ChessMove(start, bounds));
+                    }
+
+                }
+            }
+        }
         return moves;
     }
 }

@@ -28,4 +28,28 @@ class Vec2dTest {
     @Test
     void scaleTest() {
     }
+
+    @Test
+    void mirror() {
+        Vec2d v1 = new Vec2d(2, 1);
+
+        assertEquals(new Vec2d(-2, -1), v1.mirror(true, true));
+    }
+
+    @Test
+    void normalizeTest() {
+        Vec2d v1 = new Vec2d(2, 0);
+        Vec2d v2 = new Vec2d(0, 2);
+
+        assertEquals(new Vec2d(1, 0), v1.normalize());
+        assertEquals(new Vec2d(0, 1), v2.normalize());
+
+    }
+
+    @Test
+    void normalizeNullVectorTest() {
+        Vec2d v1 = new Vec2d(0, 0);
+
+        assertEquals(new Vec2d(0, 0), v1.normalize());
+    }
 }

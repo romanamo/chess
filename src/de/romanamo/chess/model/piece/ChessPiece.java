@@ -27,14 +27,38 @@ public abstract class ChessPiece implements Piece<ChessField, Vec2d, ChessMove, 
         this.value = type.getValue();
     }
 
-    public abstract List<ChessMove> getMoves(ChessField field, Vec2d v);
+    public abstract List<ChessMove> getMoves(ChessField field, Vec2d start);
 
     public List<ChessMove> getMoves(ChessField field) {
         Vec2d locationVector = this.getLocationVector(field);
-        if(locationVector == null) {
+        if (locationVector == null) {
             return new ArrayList<>();
         }
         return this.getMoves(field, locationVector);
+    }
+
+    protected List<ChessMove> getRotationalMoves(ChessField field, Vec2d start,
+                                                 Vec2d moveVector, int iterations, double angle) {
+        List<ChessMove> moves = new ArrayList<>();
+        for (int i = 0; i < iterations; i++) {
+            double rotationalAngle = angle * i;
+
+            Vec2d rotatedNormalizedMoveVector = moveVector.rotate(rotationalAngle);
+            Vec2d currentVector;
+            Vec2d nextVector = start.add(rotatedNormalizedMoveVector);
+            ChessPiece piece;
+
+            do {
+                piece = field.getPiece(nextVector);
+                if (piece == null || piece.chessPieceColor != this.chessPieceColor) {
+                    moves.add(new ChessMove(start, nextVector));
+                }
+                currentVector = nextVector;
+                nextVector = nextVector.add(rotatedNormalizedMoveVector);
+            }
+            while (field.containsIdentifier(nextVector) && field.getValue(currentVector).isEmpty());
+        }
+        return moves;
     }
 
     //TODO write
@@ -55,7 +79,6 @@ public abstract class ChessPiece implements Piece<ChessField, Vec2d, ChessMove, 
     public int getValue() {
         return this.value;
     }
-
 
 
     public ChessPieceColor getChessPieceColor() {

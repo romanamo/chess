@@ -6,10 +6,14 @@ import java.util.Collection;
 import java.util.Collections;
 import java.util.List;
 
+/**
+ * Class to describe a 2 dimensional Vector
+ * in a cartesian Integer grid coordinate System
+ */
 public class Vec2d {
 
-    private int x;
-    private int y;
+    private final int x;
+    private final int y;
 
     public Vec2d(int x, int y) {
         this.x = x;
@@ -21,13 +25,13 @@ public class Vec2d {
         this.y = vec2D.y;
     }
 
-    public Vec2d rotate(double angle) {
-        int rotatedX = (int) Math.rint(x * Math.cos(angle) - y * Math.sin(angle));
-        int rotatedY = (int) Math.rint(x * Math.sin(angle) + y * Math.cos(angle));
-
-        return new Vec2d(rotatedX, rotatedY);
-    }
-
+    /**
+     * Returns a new {@link Vec2d Vector}
+     * by performing Vector addition
+     *
+     * @param v Vector to add
+     * @return the Sum of both Vectors
+     */
     public Vec2d add(Vec2d v) {
         return new Vec2d(x + v.getX(), y + v.getY());
     }
@@ -35,6 +39,30 @@ public class Vec2d {
     public Vec2d scale(int s) {
         return new Vec2d(s * x, s * y);
     }
+
+    public Vec2d rotate(double angle) {
+        int rotatedX = (int) Math.rint(x * Math.cos(angle) - y * Math.sin(angle));
+        int rotatedY = (int) Math.rint(x * Math.sin(angle) + y * Math.cos(angle));
+
+        return new Vec2d(rotatedX, rotatedY);
+    }
+
+    public Vec2d mirror(boolean onXAxis, boolean onYAxis) {
+        int mirroredX = onXAxis ? x * -1 : x;
+        int mirroredY = onYAxis ? y * -1 : y;
+
+        return new Vec2d(mirroredX, mirroredY);
+    }
+
+    public Vec2d normalize() {
+        double radius = Math.sqrt(Math.pow(x, 2) + Math.pow(y, 2));
+
+        int normalizedX = (int) Math.rint(x / radius);
+        int normalizedY = (int) Math.rint(y / radius);
+
+        return new Vec2d(normalizedX, normalizedY);
+    }
+
 
     public int getX() {
         return x;
@@ -74,6 +102,7 @@ public class Vec2d {
 
     @Override
     public String toString() {
+        //return ChessNotation.translateVector(this);
         return "(" + x + ", " + y + ")";
     }
 }

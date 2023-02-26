@@ -12,7 +12,7 @@ public class Bishop extends ChessPiece{
     }
 
     @Override
-    public List<ChessMove> getMoves(ChessField field, Vec2d v) {
-        return null;
+    public List<ChessMove> getMoves(ChessField field, Vec2d start) {
+        return this.getRotationalMoves(field, start, new Vec2d(1,1), 4, Math.PI / 2.0);
     }
 }
