@@ -9,9 +9,9 @@ public class ChessMove implements Move<ChessField, Vec2d, ChessMove, ChessPiece,
 
     private ChessPiece capturedPiece;
 
-    private Vec2d start;
+    private final Vec2d start;
 
-    private Vec2d end;
+    private final Vec2d end;
 
     public ChessMove(Vec2d start, Vec2d end) {
         this.start = start;
@@ -21,7 +21,9 @@ public class ChessMove implements Move<ChessField, Vec2d, ChessMove, ChessPiece,
 
     @Override
     public void doMove(ChessField field) throws MoveNotApplicableException {
-
+        ChessPiece piece = field.getPiece(this.start);
+        field.setFigure(this.start, null);
+        field.setFigure(this.end, piece);
     }
 
     @Override

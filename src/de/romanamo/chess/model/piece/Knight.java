@@ -29,7 +29,7 @@ public class Knight extends ChessPiece {
             for (Vec2d bounds : new Vec2d[]{rotatedMoveVector1, rotatedMoveVector2}) {
                 if (field.containsIdentifier(bounds)) {
                     ChessPiece piece = field.getPiece(bounds);
-                    if(piece == null || piece.getChessPieceColor() == this.getChessPieceColor()) {
+                    if(piece == null || piece.getChessPieceColor() != this.getChessPieceColor()) {
                         moves.add(new ChessMove(start, bounds));
                     }
 

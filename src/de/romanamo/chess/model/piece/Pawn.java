@@ -27,17 +27,19 @@ public class Pawn extends ChessPiece{
 
         double angle = (Math.PI / 4.0);
         //TODO add en passant
-        //TODO add attack
         if(field.containsIdentifier(nextVector) && field.getValue(nextVector).isEmpty()) {
             moves.add(new ChessMove(start, nextVector));
         }
         for(int i : new int[]{-1, 1}) {
             Vec2d attackVector = start.add(normalizedDirectionVector.rotate(angle * i));
-            ChessPiece piece = field.getPiece(attackVector);
+            if(field.containsIdentifier(attackVector)) {
+                ChessPiece piece = field.getPiece(attackVector);
 
-            if(piece != null && piece.getChessPieceColor() != this.getChessPieceColor()) {
-                moves.add(new ChessMove(start, attackVector));
+                if(piece != null && piece.getChessPieceColor() != this.getChessPieceColor()) {
+                    moves.add(new ChessMove(start, attackVector));
+                }
             }
+
         }
 
         return moves;

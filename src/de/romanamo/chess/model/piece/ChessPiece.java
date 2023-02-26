@@ -44,19 +44,20 @@ public abstract class ChessPiece implements Piece<ChessField, Vec2d, ChessMove, 
             double rotationalAngle = angle * i;
 
             Vec2d rotatedNormalizedMoveVector = moveVector.rotate(rotationalAngle);
-            Vec2d currentVector;
-            Vec2d nextVector = start.add(rotatedNormalizedMoveVector);
-            ChessPiece piece;
+            Vec2d currentVector = start.add(rotatedNormalizedMoveVector);
 
-            do {
-                piece = field.getPiece(nextVector);
-                if (piece == null || piece.chessPieceColor != this.chessPieceColor) {
-                    moves.add(new ChessMove(start, nextVector));
+            while (field.containsIdentifier(currentVector)) {
+                ChessPiece piece = field.getPiece(currentVector);
+                if (piece == null) {
+                    moves.add(new ChessMove(start, currentVector));
+                } else {
+                    if (piece.getChessPieceColor() != this.getChessPieceColor()) {
+                        moves.add(new ChessMove(start, currentVector));
+                    }
+                    break;
                 }
-                currentVector = nextVector;
-                nextVector = nextVector.add(rotatedNormalizedMoveVector);
+                currentVector = currentVector.add(rotatedNormalizedMoveVector);
             }
-            while (field.containsIdentifier(nextVector) && field.getValue(currentVector).isEmpty());
         }
         return moves;
     }

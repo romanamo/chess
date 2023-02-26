@@ -27,6 +27,11 @@ class Vec2dTest {
 
     @Test
     void scaleTest() {
+        Vec2d v1 = new Vec2d(1, 0);
+        Vec2d v2 = new Vec2d(0, 1);
+
+        assertEquals(new Vec2d(2,0), v1.scale(2));
+        assertEquals(new Vec2d(0,2), v2.scale(2));
     }
 
     @Test

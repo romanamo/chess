@@ -7,10 +7,7 @@ import de.romanamo.chess.model.square.ChessSquare;
 import de.romanamo.chess.model.square.GameSquare;
 import de.romanamo.chess.structure.tuple.Couple;
 
-import java.util.HashSet;
-import java.util.List;
-import java.util.Map;
-import java.util.Set;
+import java.util.*;
 import java.util.stream.Collectors;
 
 
@@ -86,7 +83,7 @@ public class ChessField implements Field<ChessField, Vec2d, ChessMove, ChessPiec
 
     @Override
     public List<ChessPiece> getFigures() {
-        return this.fieldMap.values().stream().map(GameSquare::getFigure).toList();
+        return this.fieldMap.values().stream().map(GameSquare::getFigure).filter(Objects::nonNull).toList();
     }
 
     @Override
