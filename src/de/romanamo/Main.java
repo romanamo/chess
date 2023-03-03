@@ -19,9 +19,9 @@ public class Main {
 
 
         List<ChessPiece> whitePieces = field.getFigures().stream().filter(p -> p.getChessPieceColor() == ChessPieceColor.WHITE).toList();
-        Random r = new Random(123);
+        Random r = new Random(124);
 
-        for (int i = 0; i < 50; i++) {
+        for (int i = 0; i < 100; i++) {
             ChessPiece piece = whitePieces.get(r.nextInt(whitePieces.size()));
             ChessMove move = piece.getMoves(field).stream().findFirst().orElse(null);
 

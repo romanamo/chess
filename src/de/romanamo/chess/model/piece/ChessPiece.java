@@ -5,9 +5,7 @@ import de.romanamo.chess.model.field.ChessField;
 import de.romanamo.chess.model.move.ChessMove;
 import de.romanamo.chess.model.square.ChessSquare;
 
-import java.util.ArrayList;
-import java.util.List;
-import java.util.Map;
+import java.util.*;
 
 public abstract class ChessPiece implements Piece<ChessField, Vec2d, ChessMove, ChessPiece, ChessSquare> {
 
@@ -27,19 +25,21 @@ public abstract class ChessPiece implements Piece<ChessField, Vec2d, ChessMove, 
         this.value = type.getValue();
     }
 
-    public abstract List<ChessMove> getMoves(ChessField field, Vec2d start);
+    public abstract List<ChessMove> getMoves(ChessField field, Vec2d start, Set<Vec2d> leftOuts);
 
     public List<ChessMove> getMoves(ChessField field) {
         Vec2d locationVector = this.getLocationVector(field);
         if (locationVector == null) {
             return new ArrayList<>();
         }
-        return this.getMoves(field, locationVector);
+        return this.getMoves(field, locationVector, Set.of());
     }
 
-    protected List<ChessMove> getRotationalMoves(ChessField field, Vec2d start,
-                                                 Vec2d moveVector, int iterations, double angle) {
-        List<ChessMove> moves = new ArrayList<>();
+    public abstract Set<Vec2d> getThreatSet(ChessField field, Vec2d pos, Set<Vec2d> leftOuts);
+
+    protected Set<Vec2d> getRotationalThreats(ChessField field, Vec2d start,
+                                              Vec2d moveVector, int iterations, double angle, Set<Vec2d> leftOuts) {
+        Set<Vec2d> threats = new HashSet<>();
         for (int i = 0; i < iterations; i++) {
             double rotationalAngle = angle * i;
 
@@ -48,21 +48,20 @@ public abstract class ChessPiece implements Piece<ChessField, Vec2d, ChessMove, 
 
             while (field.containsIdentifier(currentVector)) {
                 ChessPiece piece = field.getPiece(currentVector);
-                if (piece == null) {
-                    moves.add(new ChessMove(start, currentVector));
+                if (piece == null || leftOuts.contains(currentVector)) {
+                    threats.add(currentVector);
                 } else {
                     if (piece.getChessPieceColor() != this.getChessPieceColor()) {
-                        moves.add(new ChessMove(start, currentVector));
+                        threats.add(currentVector);
                     }
                     break;
                 }
                 currentVector = currentVector.add(rotatedNormalizedMoveVector);
             }
         }
-        return moves;
+        return threats;
     }
 
-    //TODO write
     public Vec2d getLocationVector(ChessField field) {
         Map<Vec2d, ChessPiece> figureMap = field.getKeyFigureMap();
         return figureMap.keySet().stream().filter(k -> figureMap.get(k) == this).findFirst().orElse(null);
@@ -79,6 +78,14 @@ public abstract class ChessPiece implements Piece<ChessField, Vec2d, ChessMove, 
     @Override
     public int getValue() {
         return this.value;
+    }
+
+    public boolean isSameColor(ChessPiece piece) {
+        return this.chessPieceColor == piece.chessPieceColor;
+    }
+
+    public List<ChessPiece> fetchEnemyPieces(ChessField field) {
+        return field.getFigures().stream().filter(p -> !this.isSameColor(p)).toList();
     }
 
 

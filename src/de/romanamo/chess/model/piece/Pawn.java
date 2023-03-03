@@ -4,8 +4,9 @@ import de.romanamo.chess.math.Vec2d;
 import de.romanamo.chess.model.field.ChessField;
 import de.romanamo.chess.model.move.ChessMove;
 
-import java.util.ArrayList;
+import java.util.HashSet;
 import java.util.List;
+import java.util.Set;
 
 public class Pawn extends ChessPiece{
 
@@ -19,29 +20,34 @@ public class Pawn extends ChessPiece{
     }
 
     @Override
-    public List<ChessMove> getMoves(ChessField field, Vec2d start) {
-        List<ChessMove> moves = new ArrayList<>();
+    public List<ChessMove> getMoves(ChessField field, Vec2d start, Set<Vec2d> leftOuts) {
+        return null;
+    }
+
+    @Override
+    public Set<Vec2d> getThreatSet(ChessField field, Vec2d pos, Set<Vec2d> leftOuts) {
+        Set<Vec2d> threats = new HashSet<>();
 
         Vec2d normalizedDirectionVector = this.getNormalizedDirectionVector();
-        Vec2d nextVector = start.add(normalizedDirectionVector);
+        Vec2d nextVector = pos.add(normalizedDirectionVector);
 
         double angle = (Math.PI / 4.0);
         //TODO add en passant
         if(field.containsIdentifier(nextVector) && field.getValue(nextVector).isEmpty()) {
-            moves.add(new ChessMove(start, nextVector));
+            threats.add(nextVector);
         }
         for(int i : new int[]{-1, 1}) {
-            Vec2d attackVector = start.add(normalizedDirectionVector.rotate(angle * i));
+            Vec2d attackVector = pos.add(normalizedDirectionVector.rotate(angle * i));
             if(field.containsIdentifier(attackVector)) {
                 ChessPiece piece = field.getPiece(attackVector);
 
                 if(piece != null && piece.getChessPieceColor() != this.getChessPieceColor()) {
-                    moves.add(new ChessMove(start, attackVector));
+                    threats.add(attackVector);
                 }
             }
 
         }
 
-        return moves;
+        return threats;
     }
 }

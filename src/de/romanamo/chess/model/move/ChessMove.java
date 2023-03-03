@@ -31,6 +31,14 @@ public class ChessMove implements Move<ChessField, Vec2d, ChessMove, ChessPiece,
 
     }
 
+    public Vec2d getStart() {
+        return start;
+    }
+
+    public Vec2d getEnd() {
+        return end;
+    }
+
     @Override
     public String toString() {
         return "ChessMove{" +

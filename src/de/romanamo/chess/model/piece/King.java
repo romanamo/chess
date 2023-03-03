@@ -4,8 +4,8 @@ import de.romanamo.chess.math.Vec2d;
 import de.romanamo.chess.model.field.ChessField;
 import de.romanamo.chess.model.move.ChessMove;
 
-import java.util.ArrayList;
-import java.util.List;
+import java.util.*;
+import java.util.stream.Collectors;
 
 public class King extends ChessPiece {
 
@@ -14,8 +14,13 @@ public class King extends ChessPiece {
     }
 
     @Override
-    public List<ChessMove> getMoves(ChessField field, Vec2d start) {
-        List<ChessMove> moves = new ArrayList<>();
+    public List<ChessMove> getMoves(ChessField field, Vec2d start, Set<Vec2d> leftOuts) {
+        return null;
+    }
+
+    @Override
+    public Set<Vec2d> getThreatSet(ChessField field, Vec2d pos, Set<Vec2d> leftOuts) {
+        Set<Vec2d> threats = new HashSet<>();
 
         Vec2d moveVector = new Vec2d(1, 0);
 
@@ -23,15 +28,15 @@ public class King extends ChessPiece {
             double rotationalAngle = (Math.PI / 4.0) * i;
 
             Vec2d rotatedNormalizedMoveVector = moveVector.rotate(rotationalAngle);
-            Vec2d nextVector = start.add(rotatedNormalizedMoveVector);
+            Vec2d nextVector = pos.add(rotatedNormalizedMoveVector);
 
             if (field.containsIdentifier(nextVector)) {
                 ChessPiece piece = field.getPiece(nextVector);
 
                 if (piece == null || piece.getChessPieceColor() != this.getChessPieceColor())
-                    moves.add(new ChessMove(start, nextVector));
+                    threats.add(nextVector);
             }
         }
-        return moves;
+        return threats;
     }
 }
