@@ -2,9 +2,7 @@ package de.romanamo.chess.math;
 
 import de.romanamo.chess.structure.tuple.Couple;
 
-import java.util.Collection;
-import java.util.Collections;
-import java.util.List;
+import java.util.*;
 
 /**
  * Class to describe a {@link Vec2d 2-dimensional Vector}
@@ -20,6 +18,21 @@ import java.util.List;
  */
 public class Vec2d {
 
+    public static Vec2d UP = new Vec2d(0, 1);
+    public static Vec2d UP_RIGHT = new Vec2d(1, 1);
+    public static Vec2d RIGHT = new Vec2d(1, 0);
+    public static Vec2d DOWN_RIGHT = new Vec2d(1, -1);
+    public static Vec2d DOWN = new Vec2d(0, -1);
+    public static Vec2d DOWN_LEFT = new Vec2d(-1, -1);
+    public static Vec2d LEFT = new Vec2d(-1, 0);
+    public static Vec2d UP_LEFT = new Vec2d(-1, 1);
+
+    public static Set<Vec2d> DIAGONALS = Set.of(UP_RIGHT, DOWN_RIGHT, DOWN_LEFT, UP_LEFT);
+    public static Set<Vec2d> STRAIGHTS = Set.of(UP, RIGHT, DOWN, LEFT);
+
+    public static Set<Vec2d> ALL = Set.of(UP_RIGHT, DOWN_RIGHT, DOWN_LEFT, UP_LEFT, UP, RIGHT, DOWN, LEFT);
+
+    public static double EPSILON = 1e-12;
     private final int x;
     private final int y;
 
@@ -46,6 +59,19 @@ public class Vec2d {
     }
 
     /**
+     * Checks ifs two {@code double}values are close together,
+     * by checking if they are less than an epsilon distance away.
+     *
+     * @param a       first value
+     * @param b       second value
+     * @param epsilon epsilon distance
+     * @return {@code true} if these values are less than an epsilon away, else {@code false}
+     */
+    public static boolean equals(double a, double b, double epsilon) {
+        return Math.abs(a - b) < epsilon;
+    }
+
+    /**
      * Adds another {@link Vec2d Vector} onto a Vector.
      *
      * @param v Vector to add
@@ -67,7 +93,8 @@ public class Vec2d {
 
     /**
      * Rotates a {@link Vec2d Vector} by the given angle by given radian.
-     * Rounds the components to the nearest integer.
+     * Rounds the components to the nearest integer. Transforming with the help
+     * of the 2 dimensional <a href="https://en.wikipedia.org/wiki/Rotation_matrix">rotation Matrix</a>.
      *
      * @param angle to rotate
      * @return the rotated Vector
@@ -109,6 +136,45 @@ public class Vec2d {
         int normalizedY = (int) Math.rint(y / radius);
 
         return new Vec2d(normalizedX, normalizedY);
+    }
+
+    /**
+     * Calculates the normalized direction {@link Vec2d Vector},
+     * pointing from {@code this} to {@code pos}.
+     *
+     * @param pos Vector to point to
+     * @return the direction vector from {@code this} to {@code pos}
+     */
+    public Vec2d directionTo(Vec2d pos) {
+        return this.scale(-1).add(pos).normalize();
+    }
+
+    /**
+     * Calculates the length of the {@link Vec2d Vector}
+     *
+     * @return the length of the Vector
+     */
+    public double length() {
+        return Math.sqrt(Math.pow(x, 2) + Math.pow(y, 2));
+    }
+
+    /**
+     * Checks if the {@link Vec2d Vector} has the same direction.
+     *
+     * @param other other Vector
+     * @return {@code true} if they face the same direction, else {@code false}
+     */
+    public boolean equalDirection(Vec2d other) {
+        return Math.abs(this.angle() - other.angle()) < EPSILON;
+    }
+
+    /**
+     * Calculates the angle of the {@link Vector}
+     *
+     * @return the angle of the Vector
+     */
+    public double angle() {
+        return Math.atan2(x, y);
     }
 
 

@@ -12,8 +12,7 @@ import java.util.List;
 import java.util.Objects;
 import java.util.Set;
 
-import static org.junit.jupiter.api.Assertions.assertFalse;
-import static org.junit.jupiter.api.Assertions.assertTrue;
+import static org.junit.jupiter.api.Assertions.*;
 
 public class KingTest {
 
@@ -33,5 +32,35 @@ public class KingTest {
         threats.forEach(t -> field.setFigure(t, new Knight(ChessPieceColor.BLACK)));
 
         System.out.println(field.toString(true));
+    }
+
+    @Test
+    public void KingWalkTest() {
+        King k  = new King(ChessPieceColor.WHITE);
+        field.setFigure(new Vec2d(4, 4), k);
+        Rook r  = new Rook(ChessPieceColor.BLACK);
+        field.setFigure(new Vec2d(1, 4), r);
+        Rook r2  = new Rook(ChessPieceColor.BLACK);
+        field.setFigure(new Vec2d(5, 1), r2);
+
+        List<ChessMove> threats = k.getMoves(field);
+
+        threats.forEach(t -> field.setFigure(t.getEnd(), new Knight(ChessPieceColor.BLACK)));
+
+        System.out.println(field.toString(true));
+    }
+    @Test
+    public void checkingEnemies() {
+        King k  = new King(ChessPieceColor.WHITE);
+        field.setFigure(new Vec2d(4, 4), k);
+        Rook r  = new Rook(ChessPieceColor.BLACK);
+        field.setFigure(new Vec2d(1, 4), r);
+        Rook r2  = new Rook(ChessPieceColor.BLACK);
+        field.setFigure(new Vec2d(4, 8), r2);
+
+
+        System.out.println(field.toString(true));
+
+        assertEquals(Set.of(r, r2), k.getCheckingEnemies(field));
     }
 }

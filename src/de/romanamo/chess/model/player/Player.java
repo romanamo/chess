@@ -7,6 +7,7 @@ import de.romanamo.chess.model.square.Square;
 
 import java.util.Collection;
 import java.util.List;
+import java.util.Set;
 
 public interface Player<
         F extends Field<F,K,M,P,S>,
@@ -26,5 +27,7 @@ public interface Player<
     }
 
     boolean controlsPiece(P piece);
+
+    Set<M> getMoves(F field);
 }
 

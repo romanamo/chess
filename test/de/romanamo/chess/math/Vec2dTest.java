@@ -3,6 +3,7 @@ package de.romanamo.chess.math;
 import org.junit.jupiter.api.Test;
 
 import static org.junit.jupiter.api.Assertions.assertEquals;
+import static org.junit.jupiter.api.Assertions.assertTrue;
 
 class Vec2dTest {
 
@@ -64,5 +65,21 @@ class Vec2dTest {
         Vec2d v1 = new Vec2d(0, 0);
 
         assertEquals(new Vec2d(0, 0), v1.normalize());
+    }
+
+    @Test
+    void sameDirectionTest() {
+        Vec2d v1 = new Vec2d(1,0);
+        Vec2d v2 = new Vec2d(2,0);
+
+        assertTrue(v1.equalDirection(v2));
+    }
+
+    @Test
+    void sameDirectionTest2() {
+        Vec2d v1 = new Vec2d(1,1);
+        Vec2d v2 = new Vec2d(100,100);
+
+        assertTrue(v1.equalDirection(v2));
     }
 }

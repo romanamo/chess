@@ -28,7 +28,7 @@ public abstract class ChessPiece implements Piece<ChessField, Vec2d, ChessMove, 
     public abstract List<ChessMove> getMoves(ChessField field, Vec2d start, Set<Vec2d> leftOuts);
 
     public List<ChessMove> getMoves(ChessField field) {
-        Vec2d locationVector = this.getLocationVector(field);
+        Vec2d locationVector = this.getLocation(field);
         if (locationVector == null) {
             return new ArrayList<>();
         }
@@ -37,32 +37,13 @@ public abstract class ChessPiece implements Piece<ChessField, Vec2d, ChessMove, 
 
     public abstract Set<Vec2d> getThreatSet(ChessField field, Vec2d pos, Set<Vec2d> leftOuts);
 
-    protected Set<Vec2d> getRotationalThreats(ChessField field, Vec2d start,
-                                              Vec2d moveVector, int iterations, double angle, Set<Vec2d> leftOuts) {
-        Set<Vec2d> threats = new HashSet<>();
-        for (int i = 0; i < iterations; i++) {
-            double rotationalAngle = angle * i;
-
-            Vec2d rotatedNormalizedMoveVector = moveVector.rotate(rotationalAngle);
-            Vec2d currentVector = start.add(rotatedNormalizedMoveVector);
-
-            while (field.containsIdentifier(currentVector)) {
-                ChessPiece piece = field.getPiece(currentVector);
-                if (piece == null || leftOuts.contains(currentVector)) {
-                    threats.add(currentVector);
-                } else {
-                    if (piece.getChessPieceColor() != this.getChessPieceColor()) {
-                        threats.add(currentVector);
-                    }
-                    break;
-                }
-                currentVector = currentVector.add(rotatedNormalizedMoveVector);
-            }
-        }
-        return threats;
-    }
-
-    public Vec2d getLocationVector(ChessField field) {
+    /**
+     * Gets the Location of this {@link ChessPiece} on specified {@link ChessField}
+     *
+     * @param field playing field
+     * @return instance of a {@link Vec2d Vector} marking the location if on the field, else {@code null}
+     */
+    public Vec2d getLocation(ChessField field) {
         Map<Vec2d, ChessPiece> figureMap = field.getKeyFigureMap();
         return figureMap.keySet().stream().filter(k -> figureMap.get(k) == this).findFirst().orElse(null);
     }

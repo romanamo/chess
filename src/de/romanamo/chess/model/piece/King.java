@@ -4,7 +4,9 @@ import de.romanamo.chess.math.Vec2d;
 import de.romanamo.chess.model.field.ChessField;
 import de.romanamo.chess.model.move.ChessMove;
 
-import java.util.*;
+import java.util.HashSet;
+import java.util.List;
+import java.util.Set;
 import java.util.stream.Collectors;
 
 public class King extends ChessPiece {
@@ -13,9 +15,30 @@ public class King extends ChessPiece {
         super(ChessPieceType.KING, color);
     }
 
+    public Set<Vec2d> getEnemyThreats(ChessField field, Set<Vec2d> leftOuts) {
+        return this.fetchEnemyPieces(field)
+                .stream().flatMap(s -> s.getThreatSet(field, s.getLocation(field), leftOuts).stream())
+                .collect(Collectors.toSet());
+    }
+
+    public Set<ChessPiece> getCheckingEnemies(ChessField field) {
+        Vec2d location = this.getLocation(field);
+        List<ChessPiece> enemies = this.fetchEnemyPieces(field);
+
+        return enemies.stream()
+                .filter(e -> e.getThreatSet(field, e.getLocation(field), Set.of()).contains(location))
+                .collect(Collectors.toSet());
+    }
+
+
     @Override
     public List<ChessMove> getMoves(ChessField field, Vec2d start, Set<Vec2d> leftOuts) {
-        return null;
+        Set<Vec2d> options = this.getThreatSet(field, start, Set.of());
+        Set<Vec2d> enemyThreats = this.getEnemyThreats(field, Set.of(this.getLocation(field)));
+
+        options.removeAll(enemyThreats);
+
+        return options.stream().map(opt -> new ChessMove(start, opt)).toList();
     }
 
     @Override
@@ -38,5 +61,37 @@ public class King extends ChessPiece {
             }
         }
         return threats;
+    }
+
+    public Set<Vec2d> getPinnedLocations(ChessField field, Vec2d pos) {
+        Set<Vec2d> pins = new HashSet<>();
+        Vec2d kingPos = this.getLocation(field);
+
+        ChessPieceColor enemyColor = this.getChessPieceColor().getRival();
+
+        Set<Vec2d> directions = ChessPieceSlider.getRotationalSlidingVectors(8, Math.PI / 2.0, new Vec2d(1, 0));
+
+        Set<Vec2d> enemySliderPos = field.getFigures().stream()
+                .filter(p -> !p.isSameColor(this) && p instanceof ChessPieceSlider)
+                .map(p -> p.getLocation(field)).collect(Collectors.toSet());
+
+        for (Vec2d sliderPos : enemySliderPos) {
+            ChessPieceSlider sliderPiece = (ChessPieceSlider) field.getPiece(sliderPos);
+            Vec2d kingDir = kingPos.directionTo(sliderPos);
+
+            if(directions.contains(kingDir)) {
+                for (Vec2d sliderDir : sliderPiece.getSlidingVectors()) {
+                    if(kingDir.scale(-1).equalDirection(sliderDir)) {
+                        Set<Vec2d> kingSlides = ChessPieceSlider.getSlidingThreats(field, kingPos, kingDir, enemyColor, Set.of());
+                        Set<Vec2d> sliderPieceSlides = ChessPieceSlider.getSlidingThreats(field, sliderPos, sliderDir, enemyColor, Set.of());
+
+                        pins.addAll(kingSlides.stream()
+                                .filter(v -> sliderPieceSlides.contains(v) && field.getPiece(v) != null && field.getPiece(v).isSameColor(this))
+                                .collect(Collectors.toSet()));
+                    }
+                }
+            }
+        }
+        return pins;
     }
 }

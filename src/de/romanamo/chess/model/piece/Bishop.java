@@ -7,7 +7,7 @@ import de.romanamo.chess.model.move.ChessMove;
 import java.util.List;
 import java.util.Set;
 
-public class Bishop extends ChessPiece{
+public class Bishop extends ChessPieceSlider{
     public Bishop(ChessPieceColor color) {
         super(ChessPieceType.BISHOP, color);
     }
@@ -18,7 +18,7 @@ public class Bishop extends ChessPiece{
     }
 
     @Override
-    public Set<Vec2d> getThreatSet(ChessField field, Vec2d pos, Set<Vec2d> leftOuts) {
-        return this.getRotationalThreats(field, pos, new Vec2d(1,1), 4, Math.PI / 2.0, leftOuts);
+    public Set<Vec2d> getSlidingVectors() {
+        return getRotationalSlidingVectors(4, Math.PI/ 2.0, new Vec2d(1,1));
     }
 }

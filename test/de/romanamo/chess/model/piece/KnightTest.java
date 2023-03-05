@@ -39,8 +39,10 @@ class KnightTest {
                 new Vec2d(5, 2),
                 new Vec2d(6, 3));
 
-        Set<Vec2d> vec2dSet = knight.getThreatSet(field, new Vec2d(4,4), Set.of());
-        System.out.println(vec2dSet);
-        assertEquals(moveVectors, vec2dSet);
+        Set<Vec2d> threats = knight.getThreatSet(field, new Vec2d(4,4), Set.of());
+        threats.forEach(t -> field.setFigure(t, new Knight(ChessPieceColor.BLACK)));
+
+        System.out.println(field.toString(true));
+        assertEquals(moveVectors, threats);
     }
 }
